@@ -116,6 +116,7 @@ FROM python:trixie AS run-stage
   USER weewx
   
   COPY --from=build-stage /home/weewx /home/weewx
+  RUN chmod -R 755 /home/weewx
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
