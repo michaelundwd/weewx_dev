@@ -93,7 +93,7 @@ FROM python:trixie AS build-stage
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-FROM python:trixie-slim AS run-stage
+FROM python:slim-trixie AS run-stage
   
   # new code goes in here
   
