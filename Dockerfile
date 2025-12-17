@@ -96,6 +96,23 @@ FROM python:trixie AS build-stage
 FROM python:slim-trixie AS run-stage
   
   # new code goes in here
+
+  ENV VERSION=v1
+  ENV TAG=v5.2.0
+  ENV HOME=/home/weewx
+  ENV WEEWX_ROOT=$HOME/weewx-data
+  ENV WEEWX_VERSION=5.2.0
+  ENV BELCHERTOWN_VERSION="v1.6"
+  ENV TZ=Europe/London
+  ENV LANG=en_GB.UTF-8
+
+  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen \
+    && addgroup weewx \
+    && useradd -m -g weewx weewx \
+    && chown -R weewx:weewx /home/weewx \
+    && chmod -R 755 /home/weewx
+
   
   USER weewx
 
