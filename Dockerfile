@@ -111,6 +111,7 @@ FROM python:trixie AS run-stage
   COPY --from=build-stage /home/weewx /home/weewx
   COPY --from=build-stage /etc/locale.gen /etc/locale.gen
   COPY --from=build-stage /etc/default/locale /etc/default/locale
+  COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
     
   RUN chmod -R 755 /home/weewx
   
