@@ -114,6 +114,8 @@ FROM python:slim-trixie AS run-stage
     && chmod -R 755 /home/weewx
   
   USER weewx
+  
+  COPY --from=build-stage /home/weewx /home/weewx
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
@@ -124,5 +126,4 @@ FROM python:slim-trixie AS run-stage
     
   #start container using entrypoint located in the host where it can be edited directly
   ENTRYPOINT ["/home/weewx/weewx-data/scripts/entrypoint.sh"]
-  # ENTRYPOINT ["$WEEWX_ROOT/scripts/entrypoint.sh"]
   WORKDIR $WEEWX_ROOT
