@@ -18,9 +18,6 @@ FROM python:trixie AS build-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  # Define build-time dependencies that can be removed after build
-  ARG BUILD_DEPS="wget unzip git python3-dev libffi-dev libjpeg-dev gcc g++ build-essential zlib1g-dev"
-
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
           locales \
@@ -106,15 +103,19 @@ FROM python:trixie AS run-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
 
-  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+  RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    && locales \
+    && tzdata \
+    && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen \
-    &&  addgroup weewx \
+    && addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
   COPY --from=build-stage /home/weewx /home/weewx
-  COPY --from=build-stage /etc/default/locale /etc/default/locale
+  # COPY --from=build-stage /etc/default/locale /etc/default/locale
     
   RUN chmod -R 755 /home/weewx
   
