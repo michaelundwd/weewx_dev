@@ -6,7 +6,7 @@
 # copied to zeropi on 
 # this version last updated 16/12/2025 to be used as the basis of a multi-stage version of the image - v1
 
-FROM debian:trixie-slim
+FROM python:trixie
 
   LABEL maintainer="Michael Underwood"
   ENV VERSION=v1
@@ -23,7 +23,6 @@ FROM debian:trixie-slim
 
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
-          $BUILD_DEPS \
           locales \
           nano \
           openssh-client \
@@ -32,7 +31,6 @@ FROM debian:trixie-slim
           python3-pip \
           python3-setuptools \
           python3-venv \
-          rsync \
           tzdata \
       && rm -rf /var/lib/apt/lists/* \
       && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
