@@ -113,11 +113,11 @@ FROM python:trixie AS run-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
   
-  USER weewx
-  
   COPY --from=build-stage /home/weewx /home/weewx
   RUN chmod -R 755 /home/weewx
 
+  USER weewx
+  
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
   
