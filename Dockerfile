@@ -117,7 +117,7 @@ FROM python:trixie AS run-stage
   
   COPY --from=build-stage /home/weewx /home/weewx
   RUN chmod -R 755 /home/weewx \
-    &&. /home/weewx/weewx-venv/bin/activate
+    && . /home/weewx/weewx-venv/bin/activate
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
