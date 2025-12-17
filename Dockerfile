@@ -6,7 +6,7 @@
 # copied to zeropi on 
 # this version last updated 16/12/2025 to be used as the basis of a multi-stage version of the image - v1
 
-FROM python:trixie
+FROM python:trixie AS build-stage
 
   LABEL maintainer="Michael Underwood"
   ENV VERSION=v1
@@ -93,13 +93,10 @@ FROM python:trixie
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-  # Switch back to root to remove build dependencies
-  USER root
-  RUN apt-get purge -y $BUILD_DEPS \
-      && apt-get autoremove -y \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/*
-
+FROM python:trixie-slim as run-stage
+  
+  # new code goes in here
+  
   USER weewx
 
   # set up PATH for bin folder first
