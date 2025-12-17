@@ -106,13 +106,12 @@ FROM python:slim-trixie AS run-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
 
-  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
-    && locale-gen \
-    && addgroup weewx \
+    # echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+    # && locale-gen \
+  RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
-
   
   USER weewx
 
