@@ -112,7 +112,7 @@ FROM python:trixie AS run-stage
     && chmod -R 755 /home/weewx
     
   COPY --from=build-stage /home/weewx /home/weewx \
-    && /etc/default/locale /etc/default/locale
+    && --from=build-stage /etc/default/locale /etc/default/locale
     
   RUN chmod -R 755 /home/weewx
   
