@@ -101,13 +101,13 @@ FROM python:trixie AS run-stage
   ENV WEEWX_VERSION=5.2.0
   ENV BELCHERTOWN_VERSION="v1.6"
   ENV TZ=Europe/London
-  ENV LANG=en_GB.UTF-8
+  #ENV LANG=en_GB.UTF-8
   
 ENV LANG=en_GB.UTF-8
-RUN apt-get install -y locales --no-install-recommends -y && \
-    sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=$LANG
+RUN apt-get install -y locales
+RUN sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen
+RUN dpkg-reconfigure --frontend=noninteractive locales
+RUN update-locale LANG=$LANG
 
 
   #RUN apt-get update
