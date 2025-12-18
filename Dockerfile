@@ -104,7 +104,7 @@ FROM python:trixie AS run-stage
   ENV LANG=en_GB.UTF-8
   
   RUN apt-get update
-  RUN apt-get -y install --no-install-recommends -y \
+  RUN apt-get -install --no-install-recommends -y \
     && locales \
     && tzdata
   RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
