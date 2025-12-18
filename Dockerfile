@@ -102,7 +102,14 @@ FROM python:trixie AS run-stage
   ENV BELCHERTOWN_VERSION="v1.6"
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
-        
+  
+  RUN apt-get update \
+      && apt-get install --no-install-recommends -y \
+          locales \
+          tzdata \
+      && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+      && locale-gen \
+
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
