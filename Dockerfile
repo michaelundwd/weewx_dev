@@ -104,6 +104,8 @@ FROM python:trixie AS run-stage
   #ENV LANG=en_GB.UTF-8
   
 ENV LANG=en_GB.UTF-8
+RUN apt-get update
+RUN apt-get install -y tzdata
 RUN apt-get install -y locales
 RUN sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen
 RUN dpkg-reconfigure --frontend=noninteractive locales
