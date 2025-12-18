@@ -103,22 +103,16 @@ FROM python:trixie AS run-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  RUN apt-get update \
-      && apt-get install --no-install-recommends -y \
-          locales \
-          tzdata \
-      && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
-      && locale-gen \
-
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
-    && chmod -R 755 /home/weewx
+    && chmod -R 755 /home/weewx \
+    && export TZ=America/Detroit
     
   COPY --from=build-stage /home/weewx /home/weewx
+  COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
   COPY --from=build-stage /etc/locale.gen /etc/locale.gen
   COPY --from=build-stage /etc/default/locale /etc/default/locale
-  COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
     
   RUN chmod -R 755 /home/weewx
   
