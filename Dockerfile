@@ -114,7 +114,8 @@ FROM python:trixie AS run-stage
   COPY --from=build-stage /etc/default/locale /etc/default/locale
     
   RUN chmod -R 755 /home/weewx \
-    && export TZ=America/Detroit
+    && export TZ=Europe/London \
+    && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 cat /
   
   USER weewx
   
