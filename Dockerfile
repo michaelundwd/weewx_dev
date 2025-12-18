@@ -103,11 +103,18 @@ FROM python:trixie AS run-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  RUN apt-get update
-  RUN apt-get install --no-install-recommends -y locales
-  RUN apt-get install --no-install-recommends -y tzdata
-  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
-  RUN locale-gen
+ENV LANG=en_GB.UTF-8
+RUN apt-get install -y locales --no-install-recommends -y && \
+    sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=$LANG
+
+
+  #RUN apt-get update
+  #RUN apt-get install --no-install-recommends -y locales
+  #RUN apt-get install --no-install-recommends -y tzdata
+  #RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
+  #RUN locale-gen
     
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
