@@ -107,8 +107,8 @@ FROM python:trixie AS run-stage
     && apt-get -y install --no-install-recommends -y \
     && locales \
     $$ tzdata \
-    && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
-    && locale-gen
+    && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
+  RUN locale-gen
     
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
