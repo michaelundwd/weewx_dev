@@ -108,7 +108,8 @@ FROM python:trixie AS run-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
-  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+  RUN apt-get update && apt-get -y install locales \
+    && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen
     
     
