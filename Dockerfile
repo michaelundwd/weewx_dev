@@ -113,10 +113,7 @@ FROM python:trixie AS run-stage
     && locale-gen
     
     
-  # COPY --from=build-stage /home/weewx /home/weewx
-  # COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
-  # COPY --from=build-stage /etc/locale.gen /etc/locale.gen
-  # COPY --from=build-stage /etc/default/locale /etc/default/locale
+  COPY --from=build-stage /home/weewx /home/weewx
     
   RUN chmod -R 755 /home/weewx \
     && locale-gen \
