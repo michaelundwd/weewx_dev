@@ -115,7 +115,7 @@ FROM python:trixie AS run-stage
     
   RUN chmod -R 755 /home/weewx \
     && export TZ=Europe/London \
-    && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 cat /
+    && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8
   
   USER weewx
   
