@@ -106,15 +106,15 @@ FROM python:trixie AS run-stage
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
-    && chmod -R 755 /home/weewx \
-    && export TZ=America/Detroit
+    && chmod -R 755 /home/weewx
     
   COPY --from=build-stage /home/weewx /home/weewx
   COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
   COPY --from=build-stage /etc/locale.gen /etc/locale.gen
   COPY --from=build-stage /etc/default/locale /etc/default/locale
     
-  RUN chmod -R 755 /home/weewx
+  RUN chmod -R 755 /home/weewx \
+    && export TZ=America/Detroit
   
   USER weewx
   
