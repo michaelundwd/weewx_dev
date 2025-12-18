@@ -103,8 +103,8 @@ FROM python:trixie AS run-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  RUN apt-get update \
-    && apt-get -y install --no-install-recommends -y \
+  RUN apt-get update
+  RUN apt-get -y install --no-install-recommends -y \
     && locales \
     $$ tzdata
   RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
