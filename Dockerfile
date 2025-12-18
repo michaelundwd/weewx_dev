@@ -108,10 +108,14 @@ FROM python:trixie AS run-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
-  COPY --from=build-stage /home/weewx /home/weewx
-  COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
-  COPY --from=build-stage /etc/locale.gen /etc/locale.gen
-  COPY --from=build-stage /etc/default/locale /etc/default/locale
+  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen
+    
+    
+  # COPY --from=build-stage /home/weewx /home/weewx
+  # COPY --from=build-stage /usr/share/zoneinfo /usr/share/zoneinfo
+  # COPY --from=build-stage /etc/locale.gen /etc/locale.gen
+  # COPY --from=build-stage /etc/default/locale /etc/default/locale
     
   RUN chmod -R 755 /home/weewx \
     && locale-gen \
