@@ -125,12 +125,12 @@ RUN update-locale LANG=$LANG
     
   COPY --from=build-stage /home/weewx /home/weewx
     
-  RUN chmod -R 755 /home/weewx \
-    && locale-gen \
-    && export TZ=Europe/London \
-    && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
-    && date \
-    && locale
+  #RUN chmod -R 755 /home/weewx \
+  #  && locale-gen \
+  #  && export TZ=Europe/London \
+  #  && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
+  #  && date \
+  #  && locale
   
   USER weewx
   
