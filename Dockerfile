@@ -71,6 +71,7 @@ FROM python:trixie AS build-stage
       && python3 ~/weewx/src/weectl.py station create --no-prompt
 
   COPY conf-fragments/*.conf /home/weewx/tmp/conf-fragments/
+  
   RUN mkdir -p /home/weewx/tmp \
       && mkdir -p /home/weewx/weewx-data \
       && cat /home/weewx/tmp/conf-fragments/* >> /home/weewx/weewx-data/weewx.conf
@@ -94,7 +95,7 @@ FROM python:trixie AS build-stage
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-  # new code goes in here
+  # create run-stage with reduced size
 
   FROM python:slim-trixie AS run-stage
 
@@ -107,20 +108,17 @@ FROM python:trixie AS build-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
 
-  RUN addgroup weewx \
-    && useradd -m -g weewx weewx \
-    && chown -R weewx:weewx /home/weewx \
-    && chmod -R 755 /home/weewx
-    
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
           locales \
           tzdata \
       && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
       && locale-gen \
-    && date \
-    && locale
-  
+      && addgroup weewx \
+      && useradd -m -g weewx weewx \
+      && chown -R weewx:weewx /home/weewx \
+      && chmod -R 755 /home/weewx   
+      
   COPY --from=build-stage /home/weewx /home/weewx
   
 USER weewx
@@ -134,5 +132,4 @@ USER weewx
     
   #start container using entrypoint located in the host where it can be edited directly
   ENTRYPOINT ["/home/weewx/weewx-data/scripts/entrypoint.sh"]
-  # ENTRYPOINT ["$WEEWX_ROOT/scripts/entrypoint.sh"]
   WORKDIR $WEEWX_ROOT
