@@ -5,7 +5,7 @@
 # first copied to homepi on 11/12/2025
 # this version last updated 19/12/2025 for debian:trixie, Belchertown 1.6 and auto-activate weewx venv; renamed ENV VERSION=v2
 
-FROM debian:trixie-slim AS build-stage
+FROM debian:trixie AS build-stage
 
   LABEL maintainer="Michael Underwood based on Tom Mitchell <tom@tom.org>"
   ENV VERSION=v2
@@ -122,6 +122,7 @@ COPY --from=build-stage /home/weewx /home/weewx
   #  && locale
   
 USER weewx
+  RUN . /home/weewx/weewx-venv/bin/activate
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
