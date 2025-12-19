@@ -94,14 +94,25 @@ FROM debian:trixie-slim
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-  # Switch back to root to remove build dependencies
-  USER root
-  RUN apt-get purge -y $BUILD_DEPS \
-      && apt-get autoremove -y \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/*
+  # new code goes in here
 
-  USER weewx
+  FROM python:trixie AS run-stage
+
+  RUN addgroup weewx \
+    && useradd -m -g weewx weewx \
+    && chown -R weewx:weewx /home/weewx \
+    && chmod -R 755 /home/weewx
+    
+COPY --from=build-stage /home/weewx /home/weewx
+    
+  #RUN chmod -R 755 /home/weewx \
+  #  && locale-gen \
+  #  && export TZ=Europe/London \
+  #  && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
+  #  && date \
+  #  && locale
+  
+USER weewx
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
