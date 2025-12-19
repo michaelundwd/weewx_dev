@@ -98,6 +98,15 @@ FROM debian:trixie-slim AS build-stage
 
   FROM python:trixie AS run-stage
 
+  ENV VERSION=v2
+  ENV TAG=v5.2.0
+  ENV HOME=/home/weewx
+  ENV WEEWX_ROOT=$HOME/weewx-data
+  ENV WEEWX_VERSION=5.2.0
+  ENV BELCHERTOWN_VERSION="v1.6"
+  ENV TZ=Europe/London
+  ENV LANG=en_GB.UTF-8
+
   RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
