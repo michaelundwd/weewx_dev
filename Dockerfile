@@ -90,27 +90,25 @@ FROM python:trixie AS build-stage
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-FROM python:trixie AS run-stage
-  
+ 
   # new code goes in here
 
-  ENV VERSION=v1
-  ENV TAG=v5.2.0
-  ENV HOME=/home/weewx
-  ENV WEEWX_ROOT=$HOME/weewx-data
-  ENV WEEWX_VERSION=5.2.0
-  ENV BELCHERTOWN_VERSION="v1.6"
-  ENV TZ=Europe/London
+  #ENV VERSION=v1
+  #ENV TAG=v5.2.0
+  #ENV HOME=/home/weewx
+  #ENV WEEWX_ROOT=$HOME/weewx-data
+  #ENV WEEWX_VERSION=5.2.0
+  #ENV BELCHERTOWN_VERSION="v1.6"
+  #ENV TZ=Europe/London
   #ENV LANG=en_GB.UTF-8
   
-ENV LANG=en_GB.UTF-8
-RUN apt-get update
-RUN apt-get install -y tzdata
-RUN apt-get install -y locales
-#RUN sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen
-RUN echo "$LANG UTF-8" > /etc/locale.gen
-RUN dpkg-reconfigure --frontend=noninteractive locales
-RUN update-locale LANG=$LANG
+#ENV LANG=en_GB.UTF-8
+#RUN apt-get update
+#RUN apt-get install -y tzdata
+#RUN apt-get install -y locales
+#RUN echo "$LANG UTF-8" > /etc/locale.gen
+#RUN dpkg-reconfigure --frontend=noninteractive locales
+#RUN update-locale LANG=$LANG
 
 
   #RUN apt-get update
