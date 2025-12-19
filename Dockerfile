@@ -96,7 +96,7 @@ FROM debian:trixie-slim AS build-stage
 
   # new code goes in here
 
-  FROM python:trixie AS run-stage
+  FROM python:slim-trixie AS run-stage
 
   ENV VERSION=v2
   ENV TAG=v5.2.0
