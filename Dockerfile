@@ -5,7 +5,7 @@
 # first copied to homepi on 11/12/2025
 # this version last updated 19/12/2025 for debian:trixie, Belchertown 1.6 and auto-activate weewx venv; renamed ENV VERSION=v2
 
-FROM debian:trixie AS build-stage
+FROM python:trixie AS build-stage
 
   LABEL maintainer="Michael Underwood based on Tom Mitchell <tom@tom.org>"
   ENV VERSION=v2
@@ -20,21 +20,7 @@ FROM debian:trixie AS build-stage
   # Define build-time dependencies that can be removed after build
   ARG BUILD_DEPS="wget unzip git python3-dev libffi-dev libjpeg-dev gcc g++ build-essential zlib1g-dev"
 
-  RUN apt-get update \
-      && apt-get install --no-install-recommends -y \
-          $BUILD_DEPS \
-          locales \
-          nano \
-          openssh-client \
-          openssl \
-          python3 \
-          python3-pip \
-          python3-setuptools \
-          python3-venv \
-          rsync \
-          tzdata \
-      && rm -rf /var/lib/apt/lists/* \
-      && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+  RUN && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
       && locale-gen \
       && addgroup weewx \
       && useradd -m -g weewx weewx \
@@ -112,7 +98,7 @@ FROM debian:trixie AS build-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
-COPY --from=build-stage /home/weewx /home/weewx
+  COPY --from=build-stage /home/weewx /home/weewx
     
   #RUN chmod -R 755 /home/weewx \
   #  && locale-gen \
@@ -122,7 +108,6 @@ COPY --from=build-stage /home/weewx /home/weewx
   #  && locale
   
 USER weewx
-  RUN . /home/weewx/weewx-venv/bin/activate
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
