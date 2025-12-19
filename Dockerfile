@@ -117,7 +117,7 @@ FROM python:trixie AS build-stage
   #RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
   #RUN locale-gen
     
-  RUN addgroup weewx \
+#run-stage only  RUN addgroup weewx \
     && useradd -m -g weewx weewx \
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
