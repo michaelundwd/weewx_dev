@@ -122,7 +122,7 @@ FROM python:trixie AS build-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
-  COPY --from=build-stage /home/weewx /home/weewx
+#run-stage only  COPY --from=build-stage /home/weewx /home/weewx
     
   #RUN chmod -R 755 /home/weewx \
   #  && locale-gen \
