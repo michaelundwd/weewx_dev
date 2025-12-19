@@ -112,13 +112,13 @@ FROM python:trixie AS build-stage
     && chown -R weewx:weewx /home/weewx \
     && chmod -R 755 /home/weewx
     
+  RUN locale-gen \
+    && export TZ=Europe/London \
+    && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
+    && date \
+    && locale
+  
   COPY --from=build-stage /home/weewx /home/weewx
-  #RUN chmod -R 755 /home/weewx \
-  #  && locale-gen \
-  #  && export TZ=Europe/London \
-  #  && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
-  #  && date \
-  #  && locale
   
 USER weewx
 
