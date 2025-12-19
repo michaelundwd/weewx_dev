@@ -2,13 +2,14 @@
 # Copied from mitct02/weewx and modified to work
 # source: https://github.com/tomdotorg/docker-weewx
 # first modified on 21/11/2025
-# first copied to homepi on 11/12/2025
-# this version last updated 19/12/2025 for debian:trixie, Belchertown 1.6 and auto-activate weewx venv; renamed ENV VERSION=v2
+# copied to homepi on 11/12/2025
+# copied to zeropi on 
+# this version last updated 16/12/2025 to be used as the basis of a multi-stage version of the image - v1
 
-FROM debian:trixie-slim
+FROM python:trixie AS build-stage
 
-  LABEL maintainer="Michael Underwood based on Tom Mitchell <tom@tom.org>"
-  ENV VERSION=v2
+  LABEL maintainer="Michael Underwood"
+  ENV VERSION=v1
   ENV TAG=v5.2.0
   ENV HOME=/home/weewx
   ENV WEEWX_ROOT=$HOME/weewx-data
@@ -17,12 +18,8 @@ FROM debian:trixie-slim
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  # Define build-time dependencies that can be removed after build
-  ARG BUILD_DEPS="wget unzip git python3-dev libffi-dev libjpeg-dev gcc g++ build-essential zlib1g-dev"
-
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
-          $BUILD_DEPS \
           locales \
           nano \
           openssh-client \
@@ -31,7 +28,6 @@ FROM debian:trixie-slim
           python3-pip \
           python3-setuptools \
           python3-venv \
-          rsync \
           tzdata \
       && rm -rf /var/lib/apt/lists/* \
       && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
@@ -94,14 +90,50 @@ FROM debian:trixie-slim
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
 
-  # Switch back to root to remove build dependencies
-  USER root
-  RUN apt-get purge -y $BUILD_DEPS \
-      && apt-get autoremove -y \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/*
+ 
+  # new code goes in here
 
+  #ENV VERSION=v1
+  #ENV TAG=v5.2.0
+  #ENV HOME=/home/weewx
+  #ENV WEEWX_ROOT=$HOME/weewx-data
+  #ENV WEEWX_VERSION=5.2.0
+  #ENV BELCHERTOWN_VERSION="v1.6"
+  #ENV TZ=Europe/London
+  #ENV LANG=en_GB.UTF-8
+  
+#ENV LANG=en_GB.UTF-8
+#RUN apt-get update
+#RUN apt-get install -y tzdata
+#RUN apt-get install -y locales
+#RUN echo "$LANG UTF-8" > /etc/locale.gen
+#RUN dpkg-reconfigure --frontend=noninteractive locales
+#RUN update-locale LANG=$LANG
+
+
+  #RUN apt-get update
+  #RUN apt-get install --no-install-recommends -y locales
+  #RUN apt-get install --no-install-recommends -y tzdata
+  #RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
+  #RUN locale-gen
+    
+#run-stage only  RUN addgroup weewx \
+#    && useradd -m -g weewx weewx \
+#    && chown -R weewx:weewx /home/weewx \
+#    && chmod -R 755 /home/weewx
+    
+#run-stage only  COPY --from=build-stage /home/weewx /home/weewx
+    
+  #RUN chmod -R 755 /home/weewx \
+  #  && locale-gen \
+  #  && export TZ=Europe/London \
+  #  && LC_ALL=C LANG=en_GB.UTF-8 LC_MESSAGES=en_GB.UTF-8 \
+  #  && date \
+  #  && locale
+  
   USER weewx
+  
+  RUN . /home/weewx/weewx-venv/bin/activate
 
   # set up PATH for bin folder first
   ENV PATH="$HOME/weewx/bin:$PATH"
@@ -112,5 +144,4 @@ FROM debian:trixie-slim
     
   #start container using entrypoint located in the host where it can be edited directly
   ENTRYPOINT ["/home/weewx/weewx-data/scripts/entrypoint.sh"]
-  # ENTRYPOINT ["$WEEWX_ROOT/scripts/entrypoint.sh"]
   WORKDIR $WEEWX_ROOT
