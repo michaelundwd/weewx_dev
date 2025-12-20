@@ -20,21 +20,7 @@ FROM python:trixie AS build-stage
   # Define build-time dependencies that can be removed after build
   ARG BUILD_DEPS="wget unzip git python3-dev libffi-dev libjpeg-dev gcc g++ build-essential zlib1g-dev"
 
-  RUN apt-get update \
-      && apt-get install --no-install-recommends -y \
-          $BUILD_DEPS \
-          locales \
-          nano \
-          openssh-client \
-          openssl \
-          python3 \
-          python3-pip \
-          python3-setuptools \
-          python3-venv \
-          rsync \
-          tzdata \
-      && rm -rf /var/lib/apt/lists/* \
-      && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
+  RUN echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
       && locale-gen \
       && addgroup weewx \
       && useradd -m -g weewx weewx \
