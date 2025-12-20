@@ -17,9 +17,6 @@ FROM python:trixie AS build-stage
   ENV TZ=Europe/London
   ENV LANG=en_GB.UTF-8
   
-  # Define build-time dependencies that can be removed after build
-  # ARG BUILD_DEPS="wget unzip git python3-dev libffi-dev libjpeg-dev gcc g++ build-essential zlib1g-dev"
-
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
           locales \
