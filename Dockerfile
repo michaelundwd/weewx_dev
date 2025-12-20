@@ -101,7 +101,7 @@ FROM python:trixie AS build-stage
 
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
-          python3
+          python3 \
           locales \
           tzdata \
       && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
