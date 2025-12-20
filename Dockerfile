@@ -1,15 +1,14 @@
 # LORDSHIPWEATHER.UK docker image (weewx)
-# Copied from mitct02/weewx and modified to work
-# foreked from: https://github.com/tomdotorg/docker-weewx
-# this version last updated 20/12/2025
-# for debian:trixie
-# Belchertown 1.6
-# multistage build-stage
-# renamed ENV VERSION=weewx_52_b16:v2
+# Forked from https://github.com/tomdotorg/docker-weewx
+# for multistage dockerfile
+#     debian:trixie
+#     WeeWX 5.2
+#     Belchertown 1.6
+# This version last updated 20/12/2025
 
 FROM python:trixie AS build-stage
 
-  LABEL MAINTAINED_BY="Michael Underwood
+  LABEL MAINTAINED_BY="Michael Underwood"
   LABEL FORKED_FROM="https://github.com/mitct02/docker-weewx by Tom Mitchell <tom@tom.org>"
   ENV VERSION=weewx_52_b16:v2
   ENV TAG=v5.2.0
@@ -72,7 +71,7 @@ FROM python:trixie AS build-stage
     && . /home/weewx/weewx-venv/bin/activate \
     ## Belchertown extension - fixed version number for now - use ENV version when debugged
     ## Note that install can take place from .tar.gz and .zip files
-    && wget -O belchertown-new.tar.gz https://github.com/uajqq/weewx-belchertown-new/archive/refs/tags/v1.6.tar.gz \
+    && wget -O belchertown-new.tar.gz https://github.com/uajqq/weewx-belchertown-new/archive/refs/tags/$BELCHERTOWN_VERSION.tar.gz \
     && python3 ~/weewx/src/weectl.py extension install -y belchertown-new.tar.gz \
     ## Interceptor Driver
     && wget -O weewx-interceptor.zip https://github.com/matthewwall/weewx-interceptor/archive/master.zip \
@@ -80,8 +79,6 @@ FROM python:trixie AS build-stage
     ## MQTT extension
     && wget -O weewx-mqtt.zip https://github.com/matthewwall/weewx-mqtt/archive/master.zip \
     && python3 ~/weewx/src/weectl.py extension install -y weewx-mqtt.zip \
-    # Clean up all temp directories
-    && rm -rf /tmp/* /var/tmp/* \
     # Clean up Python bytecode from extensions
     && find /home/weewx -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /home/weewx -type f -name '*.pyc' -delete 2>/dev/null || true
