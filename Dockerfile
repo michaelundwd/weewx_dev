@@ -88,7 +88,7 @@ FROM python:trixie AS build-stage
 
   # create run-stage with reduced size
 
-  FROM bookworm-slim AS run-stage
+  FROM debian:trixie-slim AS run-stage
 
   ENV VERSION=v2
   ENV TAG=v5.2.0
