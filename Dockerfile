@@ -1,14 +1,17 @@
 # LORDSHIPWEATHER.UK docker image (weewx)
 # Copied from mitct02/weewx and modified to work
-# source: https://github.com/tomdotorg/docker-weewx
-# first modified on 21/11/2025
-# first copied to homepi on 11/12/2025
-# this version last updated 19/12/2025 for debian:trixie, Belchertown 1.6 and auto-activate weewx venv; renamed ENV VERSION=v2
+# foreked from: https://github.com/tomdotorg/docker-weewx
+# this version last updated 20/12/2025
+# for debian:trixie
+# Belchertown 1.6
+# multistage build-stage
+# renamed ENV VERSION=weewx_52_b16:v2
 
 FROM python:trixie AS build-stage
 
-  LABEL maintainer="Michael Underwood based on Tom Mitchell <tom@tom.org>"
-  ENV VERSION=v2
+  LABEL MAINTAINED_BY="Michael Underwood
+  LABEL FORKED_FROM="https://github.com/mitct02/docker-weewx by Tom Mitchell <tom@tom.org>"
+  ENV VERSION=weewx_52_b16:v2
   ENV TAG=v5.2.0
   ENV HOME=/home/weewx
   ENV WEEWX_ROOT=$HOME/weewx-data
