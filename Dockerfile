@@ -88,7 +88,7 @@ FROM python:trixie AS build-stage
 
   # create run-stage with reduced size
 
-  FROM python:slim-trixie AS run-stage
+  FROM debian-slim AS run-stage
 
   ENV VERSION=v2
   ENV TAG=v5.2.0
@@ -101,6 +101,7 @@ FROM python:trixie AS build-stage
 
   RUN apt-get update \
       && apt-get install --no-install-recommends -y \
+          python3
           locales \
           tzdata \
       && echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen \
